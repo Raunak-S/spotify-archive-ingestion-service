@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.Map;
 
 @Component
-public class IngestionFileReader implements ApplicationRunner {
+public class IngestionFileReader {
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -31,7 +31,7 @@ public class IngestionFileReader implements ApplicationRunner {
         return inputStream;
     }
 
-    private void readFiles() {
+    public void readFiles() {
         try (InputStreamReader inputStreamReader = new InputStreamReader(getFileAsInputStream("playlist-src/metadata-compact.json"));
              BufferedReader reader = new BufferedReader(inputStreamReader)) {
             String metadataJson = reader.readLine();
@@ -51,10 +51,5 @@ public class IngestionFileReader implements ApplicationRunner {
             e.printStackTrace();
         }
 
-    }
-
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        this.readFiles();
     }
 }

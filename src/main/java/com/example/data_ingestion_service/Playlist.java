@@ -12,7 +12,7 @@ public class Playlist {
 
     @Id
     private String id;
-    @Column(columnDefinition = "CLOB")
+    @Column(columnDefinition = "TEXT")
     private String description;
     private int numFollowers;
     private String name;
