@@ -1,6 +1,5 @@
 name:
-  Spotify Archive Data Ingestion
-
+  Spotify Archive Manual Data Ingestion
 
 on: workflow_dispatch
 
@@ -10,7 +9,7 @@ jobs:
     
     steps:
       - name: Set up Java JDK
-        uses: action/setup-java@4.7.1
+        uses: actions/setup-java@4.7.1
         with:
           java-version: 17
 
