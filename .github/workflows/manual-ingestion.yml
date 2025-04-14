@@ -11,7 +11,9 @@ jobs:
       - name: Set up Java JDK
         uses: actions/setup-java@4.7.1
         with:
-          java-version: 17
+          java-version: '17'
+          distribution: 'temurin'
+
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,6 +23,8 @@ jobs:
         with:
           repository: mackorone/spotify-playlist-archive
           path: playlists
+
+      - run: "ls"
 
       - name: Ingest playlist data
         run: |
