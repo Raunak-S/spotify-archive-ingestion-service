@@ -27,11 +27,9 @@ jobs:
       - run: "ls"
 
       - name: Ingest playlist data
-        run: |
-          cd spotify-archive-ingestion-service/
-          ./mvnw spring-boot:run
+        run: ./mvnw spring-boot:run
         env:
           JDBC_CONNECTION_STRING: ${{ secrets.JDBC_CONNECTION_STRING }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          SPOTIFY_ARCHIVE_ROOT_DIR: "../spotify-archive-playlist/"
+          SPOTIFY_ARCHIVE_ROOT_DIR: "./"
