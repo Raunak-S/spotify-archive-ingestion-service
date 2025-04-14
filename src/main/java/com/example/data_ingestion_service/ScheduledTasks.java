@@ -10,7 +10,7 @@ public class ScheduledTasks {
     @Autowired
     private IngestionFileReader ingestionFileReader;
 
-    @Scheduled(fixedRate = 15000)
+    @Scheduled(fixedRate = 600000)
     public void ingestFiles() {
         ingestionFileReader.readFiles();
     }
