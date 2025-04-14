@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -39,14 +42,14 @@ public class IngestionFileReader {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             Map<String, String> metadataMap = objectMapper.readValue(metadataJson, new TypeReference<Map<String, String>>(){});
 
+            List<Playlist> playlistList = new ArrayList<>();
             for (String id : metadataMap.keySet()) {
-                Playlist p = objectMapper.readValue(applicationContext.getResource("classpath:playlist-src/playlists/" + id + ".json").getFile(), Playlist.class);
+                Playlist p = objectMapper.readValue(getFileAsInputStream("playlist-src/playlists/" + id + ".json"), Playlist.class);
                 p.setId(id);
-                this.repository.save(p);
+                playlistList.add(p);
             }
-//            System.out.println(this.repository.findById("01WIu4Rst0xeZnTunWxUL7"));
+            this.repository.saveAll(playlistList);
 
-            System.out.println(this.repository.findAllByOrderByNumTracksDesc().iterator().next());
         } catch (IOException e) {
             e.printStackTrace();
         }
