@@ -1,0 +1,34 @@
+name:
+  Spotify Archive Data Ingestion
+
+
+on: workflow_dispatch
+
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Set up Java JDK
+        uses: action/setup-java@4.7.1
+        with:
+          java-version: 17
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout spotify-playlist-archive repo
+        uses: actions/checkout@v4
+        with:
+          repository: mackorone/spotify-playlist-archive
+          path: playlists
+
+      - name: Ingest playlist data
+        run: |
+          cd spotify-archive-ingestion-service/
+          ./mvnw spring-boot:run
+        env:
+          JDBC_CONNECTION_STRING: ${{ secrets.JDBC_CONNECTION_STRING }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          SPOTIFY_ARCHIVE_ROOT_DIR: "../spotify-archive-playlist/"
