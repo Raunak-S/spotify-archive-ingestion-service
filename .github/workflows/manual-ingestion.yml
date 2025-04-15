@@ -22,9 +22,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: mackorone/spotify-playlist-archive
-          path: playlists
+          sparse-checkout: |
+            playlists/metadata/metadata-compact.json
+            playlists/pretty
 
-      - run: "ls; ls playlists"
+      - run: "ls; ls spotify-playlist-archive"
 
       - name: Ingest playlist data
         run: "./mvnw spring-boot:run"
@@ -32,4 +34,4 @@ jobs:
           JDBC_CONNECTION_STRING: ${{ secrets.JDBC_CONNECTION_STRING }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          SPOTIFY_ARCHIVE_ROOT_DIR: "./"
+          SPOTIFY_ARCHIVE_ROOT_DIR: "./spotify-playlist-archive"
