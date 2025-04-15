@@ -24,10 +24,10 @@ jobs:
           repository: mackorone/spotify-playlist-archive
           path: playlists
 
-      - run: "ls"
+      - run: "ls; ls playlists"
 
       - name: Ingest playlist data
-        run: ./mvnw spring-boot:run
+        run: "./mvnw spring-boot:run"
         env:
           JDBC_CONNECTION_STRING: ${{ secrets.JDBC_CONNECTION_STRING }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
