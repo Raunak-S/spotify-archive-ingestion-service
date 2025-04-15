@@ -15,9 +15,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
-public class IngestionFileReader {
+public class IngestionFileReader implements ApplicationRunner {
 
     @Autowired
     private PlaylistRepository repository;
@@ -28,7 +30,6 @@ public class IngestionFileReader {
     private InputStream getFileAsInputStream(String filename) throws IllegalArgumentException {
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(filename);
-
         if (inputStream == null) {
             throw new IllegalArgumentException("File not found! " + filename);
         }
@@ -36,8 +37,8 @@ public class IngestionFileReader {
         return inputStream;
     }
 
-    public void readFiles() {
-        try (InputStreamReader inputStreamReader = new InputStreamReader(getFileAsInputStream(this.spotifyArchiveRootDir + "playlists/metadata/metadata-compact.json"));
+    public void ingest() {
+        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(spotifyArchiveRootDir + "playlists/metadata/metadata-compact.json"));
              BufferedReader reader = new BufferedReader(inputStreamReader)) {
             String metadataJson = reader.readLine();
             ObjectMapper objectMapper = new ObjectMapper();
@@ -46,15 +47,19 @@ public class IngestionFileReader {
 
             List<Playlist> playlistList = new ArrayList<>();
             for (String id : metadataMap.keySet()) {
-                Playlist p = objectMapper.readValue(getFileAsInputStream(this.spotifyArchiveRootDir + "playlists/pretty" + id + ".json"), Playlist.class);
+                Playlist p = objectMapper.readValue(new FileInputStream(spotifyArchiveRootDir + "playlists/pretty/" + id + ".json"), Playlist.class);
                 p.setId(id);
                 playlistList.add(p);
             }
-            this.repository.saveAll(playlistList);
+            repository.saveAll(playlistList);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        this.ingest();
     }
 }
