@@ -24,7 +24,7 @@ public class CustomPlaylistDeserializerTest {
     }
 
     @Test
-    public void testDeserializeMalformedInput() throws IOException {
+    public void testDeserializeMalformedInput() {
         String json = "{\"description\":\"Sample playlist\",,,,,\"num_followers\":100,\"original_name\":\"Sample\",\"url\":\"https://www.sampleplaylist.com/\",\"tracks\":[{\"duration_ms\":120000,\"url\":\"https://www.sampletrack1.com/\"},{\"duration_ms\":240000,\"url\":\"https://www.sampletrack2.com/\"}]}";
 
         assertThrows(IOException.class, () -> new ObjectMapper().readValue(json, Playlist.class));
