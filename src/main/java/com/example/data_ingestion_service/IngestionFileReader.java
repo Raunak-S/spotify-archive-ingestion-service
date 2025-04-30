@@ -7,16 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class IngestionFileReader implements ApplicationRunner {
@@ -40,10 +36,9 @@ public class IngestionFileReader implements ApplicationRunner {
     public void ingest() {
         try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(spotifyArchiveRootDir + "playlists/metadata/metadata-compact.json"));
              BufferedReader reader = new BufferedReader(inputStreamReader)) {
-            String metadataJson = reader.readLine();
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            Map<String, String> metadataMap = objectMapper.readValue(metadataJson, new TypeReference<Map<String, String>>(){});
+            Map<String, String> metadataMap = objectMapper.readValue(reader.readLine(), new TypeReference<Map<String, String>>(){});
 
             List<Playlist> playlistList = new ArrayList<>();
             for (String id : metadataMap.keySet()) {

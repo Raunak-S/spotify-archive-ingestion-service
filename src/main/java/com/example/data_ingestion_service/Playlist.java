@@ -18,15 +18,17 @@ public class Playlist {
     private String name;
     private String url;
     private int numTracks;
+    private int duration;
 
     protected Playlist() {}
 
-    public Playlist(String description, int numFollowers, String name, String url, int numTracks) {
+    public Playlist(String description, int numFollowers, String name, String url, int numTracks, int duration) {
         this.description = description;
         this.numFollowers = numFollowers;
         this.name = name;
         this.url = url;
         this.numTracks = numTracks;
+        this.duration = duration;
     }
 
 
@@ -88,6 +90,14 @@ public class Playlist {
                 ", url='" + url + '\'' +
                 ", numTracks=" + numTracks +
                 '}';
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }
 
